@@ -7,5 +7,12 @@ This is a Node.JS script / server that runs puppeteer inside a Heroku App. It ch
 ## Development
 Deploy via
 ```
-git push heroku master
+git push heroku main
 ```
+
+---
+
+Test web scraper locally via
+```
+npm start:scraper
+``` 
