@@ -6,13 +6,21 @@
         "node": "14.x"
     },
     "type": "module",
-    "main": "index.js",
+    "main": "dist/index.js",
     "scripts": {
-        "start:web": "node index.js",
-        "start:scraper": "node web-scraper.js"
+        "postinstall": "tsc",
+        "watch:ts": "tsc -w",
+        "watch:node": "nodemon dist/index.js",
+        "start:web": "node dist/index.js",
+        "start:scraper": "node dist/web-scraper.js",
+        "compile": "tsc"
     },
     "dependencies": {
+        "typescript": "^4.1.3",
         "express": "^4.15.2"
+    },
+    "devDependencies": {
+        "@types/node": "14.14.22"
     },
     "repository": {
         "type": "git",

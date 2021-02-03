@@ -1,6 +1,6 @@
 export default class Scraper {
-    name = "Abstract Scraper"
-    scrape() {
+    name: string = "Abstract Scraper"
+    scrape(): void {
         console.log('scrape func not implemented')
     }
 }

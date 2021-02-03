@@ -5,7 +5,18 @@ A web scraper that reports it's results to a pusher channel
 This is a Node.JS script / server that runs puppeteer inside a Heroku App. It checks for changes on web sites and sends the results to a Pusher Channel.
 
 ## Development
-The whole setup is built with Heroku in mind.
+The whole setup is built with Heroku in mind. It also uses Typescript.
+
+When testing locally, compile the sources into Javascript with
+```
+npm run compile
+
+# or if you installed Typescript locally simply:
+tsc
+
+# or use the watcher
+npm run watch:ts
+``` 
 
 ### Heroku Stuff
 
@@ -33,16 +44,21 @@ git push heroku main
 heroku addons:create scheduler:standard
 
 # test one-off-dyno via
-heroku run node web-scraper.js
+heroku run node dist/web-scraper.js
 
-# add the task above in scheduler config
+# Open scheduler config
 heroku addons:open scheduler
 ```
+
+Add `node dist/web-scraper.js` in the scheduler config.
 
 ### Testing
 
 Run the npm/yarn script `start:scraper` or type:
 
 ```bash
-node web-scraper.js
+# compile if not already done
+npm run compile
+
+node dist/web-scraper.js
 ```

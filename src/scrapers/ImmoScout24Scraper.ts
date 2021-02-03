@@ -1,8 +1,8 @@
-import Scraper from './Scraper.js'
+import Scraper from './Scraper'
 
 export default class ImmoScout24Scraper extends Scraper {
-    name = "ImmoScout24"
-    scrape() {
+    name: string = "ImmoScout24"
+    scrape(): void {
         console.log('ImmoScout24 scrape!' + this.name)
     }
 }
