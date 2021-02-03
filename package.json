@@ -1,0 +1,31 @@
+{
+  "name": "web-scraper-pusher",
+  "version": "0.1.0",
+  "description": "Node.JS server that scrapes web pages and sends the results to a Pusher channel",
+  "engines": {
+      "node": "14.x"
+  },
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+      "start:web": "node index.js",
+      "start:scraper": "node web-scraper.js"
+  },
+  "dependencies": {
+      "express": "^4.15.2"
+  },
+  "devDependencies": {
+      "got": "^11.3.0",
+      "tape": "^4.7.0"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/EricLambrecht/web-scraper-pusher"
+  },
+  "keywords": [
+      "node",
+      "heroku",
+      "express"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Web Scraper — Pusher Server",
+  "description": "Node.JS server that scrapes web pages and sends the results to a Pusher channel",
+  "repository": "https://github.com/EricLambrecht/web-scraper-pusher",
+  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/main/public/node.svg",
+  "keywords": ["node", "express", "heroku"],
+  "image": "heroku/nodejs"
+}
