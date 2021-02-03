@@ -1,4 +1,4 @@
-# web-scraper-pusher
+# Web Scraper for Pusher Channels
 A web scraper that reports it's results to a pusher channel
 
 ## Context
@@ -9,15 +9,15 @@ The whole setup is built with Heroku in mind.
 
 ### Heroku Stuff
 
-#### So, first login:
-```bash
-heroku login
-```
-
-#### Create the Heroku app
+#### Creating the Heroku app
 In your git repository run:
+
 ```bash
-heroku create [APPNAME]
+# if not already logged in
+heroku login
+
+# create the app
+heroku create my-app-name
 ```
 
 You'll also have to add the buildpacks `jontewks/puppeteer` and `heroku/nodejs` to your app. This can be done via CLI (`heroku buildpacks:add $NAME$`) or in the App Settings (Heroku Dashboard Web UI).
@@ -27,7 +27,7 @@ You'll also have to add the buildpacks `jontewks/puppeteer` and `heroku/nodejs` 
 git push heroku main
 ```
 
-####  If you want to run the scrapers regularly on Heroku.
+####  If you want to run the scrapers regularly on Heroku:
 ```bash
 # install scheduler add-on
 heroku addons:create scheduler:standard
