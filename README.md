@@ -43,7 +43,7 @@ git push heroku main
 # install scheduler add-on
 heroku addons:create scheduler:standard
 
-# test one-off-dyno via
+# test one-off-dyno via (after code has been pushed to Heroku!)
 heroku run node dist/web-scraper.js
 
 # Open scheduler config
@@ -54,11 +54,14 @@ Add `node dist/web-scraper.js` in the scheduler config.
 
 ### Testing
 
-Run the npm/yarn script `start:scraper` or type:
+After you compiled your Typescript sources into JS, run the npm/yarn script `start:scraper` or type:
 
 ```bash
-# compile if not already done
-npm run compile
-
 node dist/web-scraper.js
+
+# alternatively
+npm run start:scraper
+
+# or, if you want to execute it remotely on Heroku
+heroku run dist/web-scraper.js
 ```
