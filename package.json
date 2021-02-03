@@ -8,12 +8,11 @@
     "type": "module",
     "main": "dist/index.js",
     "scripts": {
-        "postinstall": "tsc",
+        "build": "tsc",
         "watch:ts": "tsc -w",
         "watch:node": "nodemon dist/index.js",
         "start:web": "node dist/index.js",
         "start:scraper": "node dist/web-scraper.js",
-        "compile": "tsc"
     },
     "dependencies": {
         "typescript": "^4.1.3",

@@ -9,7 +9,7 @@ The whole setup is built with Heroku in mind. It also uses Typescript.
 
 When testing locally, compile the sources into Javascript with
 ```
-npm run compile
+npm run build
 
 # or if you installed Typescript locally simply:
 tsc
