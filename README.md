@@ -9,9 +9,10 @@ The whole setup is built with Heroku in mind. It also uses Typescript.
 
 When testing locally, compile the sources into Javascript with
 ```
+# via npm
 npm run build
 
-# or if you installed Typescript locally simply:
+# or, if you installed Typescript locally, simply:
 tsc
 
 # or use the watcher
@@ -54,14 +55,15 @@ Add `node dist/web-scraper.js` in the scheduler config.
 
 ### Testing
 
-After you compiled your Typescript sources into JS, run the npm/yarn script `start:scraper` or type:
+After you compiled your Typescript sources into JS you can start the scraper task like so:
 
 ```bash
+# via node...
 node dist/web-scraper.js
 
-# alternatively
+# ...or via npm...
 npm run start:scraper
 
-# or, if you want to execute it remotely on Heroku
+# ...or if you want to execute it remotely on Heroku:
 heroku run dist/web-scraper.js
 ```
