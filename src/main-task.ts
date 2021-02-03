@@ -1,17 +1,23 @@
-import scraperList from './scrapers/index.js'
+import scraperList from './scrapers/index'
 
-function run() {
-  greet()
+const run = (): void => {
+  sayHello()
   runScrapers()
+  sayGoodbye()
 }
 
-const greet = () => {
-  console.log('Starting Web-Scraper!')
+const sayHello = (): void => {
+  console.log('>>> Starting Web-Scraper! <<<')
 }
 
-const runScrapers = () => {
+const sayGoodbye = (): void => {
+  console.log('>>> Scraping finished! <<<')
+}
+
+const runScrapers = (): void => {
   scraperList.forEach((Scraper) => {
     const scraper = new Scraper()
+    console.log(`Running ${scraper.name}...`)
     scraper.scrape()
   })
 }
