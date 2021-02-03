@@ -45,13 +45,13 @@ git push heroku main
 heroku addons:create scheduler:standard
 
 # test one-off-dyno via (after code has been pushed to Heroku!)
-heroku run node dist/web-scraper.js
+heroku run node dist/main-task.js
 
 # Open scheduler config
 heroku addons:open scheduler
 ```
 
-Add `node dist/web-scraper.js` in the scheduler config.
+Add `node dist/main-task.js` in the scheduler config.
 
 ### Testing
 
@@ -59,11 +59,11 @@ After you compiled your Typescript sources into JS you can start the scraper tas
 
 ```bash
 # via node...
-node dist/web-scraper.js
+node dist/main-task.js
 
 # ...or via npm...
 npm run start:scraper
 
 # ...or if you want to execute it remotely on Heroku:
-heroku run dist/web-scraper.js
+heroku run dist/main-task.js
 ```
