@@ -1,8 +1,9 @@
-import scraperList from './scrapers/index'
+import scraperList from './scrapers/index.js'
+import Puppeteer from 'puppeteer'
 
-const run = (): void => {
+const run = async (): Promise<void> => {
   sayHello()
-  runScrapers()
+  await runScrapers()
   sayGoodbye()
 }
 
@@ -14,16 +15,27 @@ const sayGoodbye = (): void => {
   console.log('>>> Scraping finished! <<<')
 }
 
-const runScrapers = (): void => {
-  scraperList.forEach((Scraper) => {
-    const scraper = new Scraper()
+const runScrapers = async (): Promise<void> => {
+  const browser = await Puppeteer.launch({
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ],
+    headless: true // TODO: make configurable via flag
+  });
+  const page = await browser.newPage();
+
+  for (const Scraper of scraperList) {
+    const scraper = new Scraper(page)
     console.log(`Running ${scraper.name}...`)
-    scraper.scrape()
-  })
+    await scraper.scrape()
+  }
+
+  await browser.close();
 }
 
 //
 // ====================================================
 //
 
-run()
+await run()

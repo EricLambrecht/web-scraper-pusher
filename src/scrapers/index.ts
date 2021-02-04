@@ -1,7 +1,7 @@
-import Scraper from './Scraper'
-import ImmoScout24Scraper from './ImmoScout24Scraper'
-import ImmoweltScraper from './ImmoweltScraper'
-import ImmonetScraper from './ImmonetScraper'
+import Scraper from './Scraper.js'
+import ImmoScout24Scraper from './ImmoScout24Scraper.js'
+import ImmoweltScraper from './ImmoweltScraper.js'
+import ImmonetScraper from './ImmonetScraper.js'
 
 const list: typeof Scraper[] = [
     ImmoScout24Scraper,
