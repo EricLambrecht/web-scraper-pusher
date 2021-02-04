@@ -60,7 +60,7 @@ const runChangeDetection = async (client: Client): Promise<void> => {
       '--no-sandbox',
       '--disable-setuid-sandbox',
     ],
-    headless: true // TODO: make configurable via flag
+    headless: false // TODO: make configurable via flag
   });
 
   const page = await browser.newPage();

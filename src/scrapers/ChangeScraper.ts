@@ -1,13 +1,13 @@
 import { Client, Query } from 'pg'
-import { Page } from 'puppeteer'
+import { ElementHandle, Page } from 'puppeteer'
 import { DB_TABLE_CHANGE_SCRAPERS } from '../config/db'
 
-type ChangeDetectionResult = {
+export type ChangeDetectionResult = {
     hasChanged: boolean
     details?: string
 }
 
-type ChangeDetectionValue = string
+export type ChangeDetectionValue = string
 
 export default class ChangeScraper {
     page: Page
@@ -27,15 +27,17 @@ export default class ChangeScraper {
         }
 
         await this.page.goto(this.startUrl)
-        const newValue = await this.scrapeForValue()
-        const oldValue = await this.getPreviousValue()
-        const hasChanged = this.valueHasChanged(newValue, oldValue)
-        const details = this.getDetails()
+        const scrapedElement = await this.scrapeForElement()
+        const previousValue = await this.getPreviousValue()
 
+        const delta = await this.getDelta(scrapedElement, previousValue)
+        const details = await this.inferDetailsFromDelta(delta)
+
+        const newValue = await this.retrieveComparisonValueFromScrapedElement(scrapedElement)
         await this.persistValue(newValue)
 
         return {
-            hasChanged,
+            hasChanged: delta.length !== 0,
             details,
         }
     }
@@ -43,7 +45,7 @@ export default class ChangeScraper {
     /**
      * Retrieves a new change detection value from a webpage
      */
-    async scrapeForValue(): Promise<ChangeDetectionValue> {
+    async scrapeForElement(): Promise<ElementHandle> {
         throw new Error(`${this.name} is missing the scrapeForValue() function!`)
     }
 
@@ -80,23 +82,35 @@ export default class ChangeScraper {
             values: [this.name, data]
         }
         try {
-            const res = await this.db.query(query)
+            await this.db.query(query)
         } catch (e) {
             console.error(e.stack)
         }
     }
 
     /**
-     * Returns true if values differ
-     * @param newValue old value
-     * @param oldValue new value
+     * Returns a list of changes compared to the previous scraping session. An empty array means nothing has changed.
+     * The list can contain one or more items depending on what has changed and what is supposed to be done with the delta.
+     * @param scrapedElement The currently scraped element 
+     * @param lastValue 
      */
-    valueHasChanged(newValue: ChangeDetectionValue, oldValue: ChangeDetectionValue): boolean {
-        console.log(newValue, oldValue)
-        return newValue !== oldValue
+    async getDelta(scrapedElement: ElementHandle, lastValue: ChangeDetectionValue): Promise<ElementHandle[]> {
+        return []
     }
 
-    getDetails(): string {
-        return this.details
+    async getElementTextContent(element: ElementHandle): Promise<string> {
+        return this.page.evaluate(el => el.textContent, element)
+    }
+
+    async getElementAttribute(element: ElementHandle, attributeName: string): Promise<string> {
+        return this.page.evaluate((el: HTMLElement) => el.getAttribute(attributeName), element)
+    }
+
+    async retrieveComparisonValueFromScrapedElement(element: ElementHandle): Promise<string> {
+        return this.getElementTextContent(element)
+    }
+
+    async inferDetailsFromDelta(delta: ElementHandle[]): Promise<string> {
+        return ''
     }
 }
