@@ -1,5 +1,6 @@
-import Scraper from './Scraper.js'
+import ChangeScraper from './ChangeScraper.js'
 
-export default class ImmoweltScraper extends Scraper {
+export default class ImmoweltScraper extends ChangeScraper {
     name: string = "Immowelt"
+    startUrl = "https://immowelt.de"
 }

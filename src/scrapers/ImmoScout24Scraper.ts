@@ -1,12 +1,12 @@
-import Scraper from './Scraper.js'
+import ChangeScraper from './ChangeScraper.js'
 
-export default class ImmoScout24Scraper extends Scraper {
+export default class ImmoScout24Scraper extends ChangeScraper {
     name: string = "ImmoScout24"
+    startUrl = 'https://www.immobilienscout24.de/'
 
-    async scrape() {
-        await this.page.goto('https://www.immobilienscout24.de/');
+    async scrapeValue() {
         const element = await this.page.$('[data-qa=title] > span')
-        console.log(element ? 'element found!' : 'element not found')
+        return element
     }
 
     // TODO: pusher channels server installeiren, notify function o.ä. hinzufügen

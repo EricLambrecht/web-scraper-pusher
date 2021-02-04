@@ -2,7 +2,7 @@
 A web scraper that reports it's results to a pusher channel
 
 ## Context
-This is a Node.JS script / server that runs puppeteer inside a Heroku App. It checks for changes on web sites and sends the results to a Pusher Channel.
+This repo contains a Node.JS-script that runs puppeteer inside a Heroku App (and a small express server as a sort of health check). The script (`src/main-task.js`) checks for changes on web sites and sends the results to a Pusher Channel. Changes are detected using a Postgres DB (also on Heroku) as an intermediate storage.
 
 ## Development
 The whole setup is built with Heroku in mind. It also uses Typescript.
@@ -32,7 +32,17 @@ heroku login
 heroku create my-app-name
 ```
 
-You'll also have to add the buildpacks `jontewks/puppeteer` and `heroku/nodejs` to your app. This can be done via CLI (`heroku buildpacks:add $NAME$`) or in the App Settings (Heroku Dashboard Web UI).
+You'll also have to add the buildpacks `jontewks/puppeteer` and `heroku/nodejs` to your app. This can be done via CLI or in the App Settings (Heroku Dashboard Web UI).
+```
+heroku buildpacks:add jontewks/puppeteer
+heroku buildpacks:add heroku/nodejs
+```
+
+For scraper persistence add the Postgres Add-On:
+```
+heroku addons:create heroku-postgresql:hobby-dev
+``` 
+**Note**: You will have to [install Postgress locally](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup), too! — well... — only if you want to run the code locally of course.
 
 #### Deployments
 ```bash
