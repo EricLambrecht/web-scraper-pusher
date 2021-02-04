@@ -25,7 +25,8 @@ export default class ImmoScout24Scraper extends ListChangeScraper {
 
     async getExposeUrlFromListItem(listItem: ElementHandle): Promise<string> {
         const exposeLink = await listItem.$('.result-list-entry__data a')
-        return 'https://www.immobilienscout24.de/' + this.getElementAttribute(exposeLink, 'href')
+        const relativeLinkPath = await this.getElementAttribute(exposeLink, 'href')
+        return 'https://www.immobilienscout24.de' + relativeLinkPath
     }
 
     async handleCookieBanner() {

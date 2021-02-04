@@ -59,7 +59,7 @@ const runChangeDetection = async (client: Client): Promise<void> => {
       '--no-sandbox',
       '--disable-setuid-sandbox',
     ],
-    headless: false // TODO: make configurable via flag
+    headless: true // TODO: make configurable via flag
   });
 
   const page = await browser.newPage();
@@ -68,7 +68,9 @@ const runChangeDetection = async (client: Client): Promise<void> => {
     const scraper = new Scraper(page, client)
     console.log(`Running ${scraper.name}...`)
     const result = await scraper.detectChange()
-    publishNotification(result.details)
+    if (result.hasChanged) {
+      publishNotification(result.details)
+    }
   }
 
   await browser.close();

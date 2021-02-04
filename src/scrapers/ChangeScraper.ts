@@ -98,12 +98,14 @@ export default class ChangeScraper {
         return []
     }
 
-    async getElementTextContent(element: ElementHandle): Promise<string> {
+    async getElementTextContent(element: ElementHandle): Promise<string | null> {
+        if (!element) return null
         return this.page.evaluate(el => el.textContent, element)
     }
 
-    async getElementAttribute(element: ElementHandle, attributeName: string): Promise<string> {
-        return this.page.evaluate((el: HTMLElement) => el.getAttribute(attributeName), element)
+    async getElementAttribute(element: ElementHandle, attributeName: string): Promise<string | null> {
+        if (!element) return null
+        return this.page.evaluate((el: HTMLElement, attributeName: string) => el.getAttribute(attributeName), element, attributeName)
     }
 
     async retrieveComparisonValueFromScrapedElement(element: ElementHandle): Promise<string> {
