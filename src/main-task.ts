@@ -4,6 +4,7 @@ import ChangeScraper from './scrapers/ChangeScraper.js'
 import ImmoScout24Scraper from './scrapers/ImmoScout24Scraper.js'
 import ImmoweltScraper from './scrapers/ImmoweltScraper.js'
 import ImmonetScraper from './scrapers/ImmonetScraper.js'
+import { DB_TABLE_CHANGE_SCRAPERS } from './config/db.js'
 
 const SCRAPER_LIST: typeof ChangeScraper[] = [
     ImmoScout24Scraper,
@@ -30,6 +31,7 @@ const sayHello = (): void => {
 
 const sayGoodbye = (): void => {
   console.log('>>> Scraping finished! <<<')
+  process.exit()
 }
 
 const initDatabase = async (): Promise<Client> => {
@@ -41,6 +43,12 @@ const initDatabase = async (): Promise<Client> => {
     }
   });
   await client.connect()
+  await client.query(`CREATE TABLE IF NOT EXISTS ${DB_TABLE_CHANGE_SCRAPERS} (
+    name varchar(45) NOT NULL,
+    last_value varchar(450) NOT NULL,
+    enabled boolean NOT NULL DEFAULT 'true',
+    PRIMARY KEY (name)
+  );`)
   return client
 }
 
