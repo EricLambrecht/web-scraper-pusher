@@ -1,13 +1,12 @@
 import Puppeteer from 'puppeteer'
 import { Client } from 'pg'
 import ChangeScraper from './scrapers/ChangeScraper.js'
-import ImmoScout24Scraper from './scrapers/ImmoScout24Scraper.js'
 import ImmoweltScraper from './scrapers/ImmoweltScraper.js'
 import ImmonetScraper from './scrapers/ImmonetScraper.js'
 import { DB_TABLE_CHANGE_SCRAPERS } from './config/db.js'
 
 const SCRAPER_LIST: typeof ChangeScraper[] = [
-    ImmoScout24Scraper,
+    // ImmoScout24Scraper, // has bot protection!
     ImmoweltScraper,
     ImmonetScraper,
 ]
