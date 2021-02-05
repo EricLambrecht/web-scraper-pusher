@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ea5934e-696d-4534-b681-652f007c9870" name="Default Changelist" comment="">
+    <list default="true" id="4ea5934e-696d-4534-b681-652f007c9870" name="Default Changelist" comment="Rename getListElements into getListItemElements">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,10 +42,31 @@
       <updated>1612452116386</updated>
       <workItem from="1612452118568" duration="84000" />
       <workItem from="1612534366506" duration="195000" />
+      <workItem from="1612557681950" duration="319000" />
     </task>
+    <task id="LOCAL-00001" summary="Add a better default implementation for single element change scrapers">
+      <created>1612557778807</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1612557778807</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Rename getListElements into getListItemElements">
+      <created>1612557810052</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1612557810052</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add a better default implementation for single element change scrapers" />
+    <MESSAGE value="Rename getListElements into getListItemElements" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rename getListElements into getListItemElements" />
   </component>
 </project>
