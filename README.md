@@ -103,7 +103,7 @@ For scraper persistence add the Postgres Add-On:
 heroku addons:create heroku-postgresql:hobby-dev
 ```
 
-**Note**: You will have to [install Postgress locally](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup), too! — well... — only if you want to run the code locally of course. |
+**Note**: You will have to [install Postgress locally](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup), too! — well... — only if you want to run the code locally of course.
 
 #### Deployments
 
