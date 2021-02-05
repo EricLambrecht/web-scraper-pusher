@@ -53,7 +53,6 @@ const initPusher = (): Pusher => {
 }
 
 const initDatabase = async (): Promise<Client> => {
-  console.log('connecting to', process.env.DATABASE_URL)
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {
@@ -67,10 +66,7 @@ const initDatabase = async (): Promise<Client> => {
     enabled boolean NOT NULL DEFAULT 'true',
     PRIMARY KEY (name)
   );`)
-  // TODO: This is only temporary
-  await client.query(
-    `ALTER TABLE ${DB_TABLE_CHANGE_SCRAPERS} ALTER COLUMN last_value TYPE varchar(8192);`
-  )
+
   return client
 }
 
@@ -100,7 +96,7 @@ const runChangeDetection = async (
 }
 
 const publishNotification = (pusher: Pusher, result: ChangeDetectionResult) => {
-  console.log('Notification: ' + result.details)
+  console.log('Sending new notification: ' + result.details)
   pusher.trigger('scraper_updates', 'change_detected', {
     id: result.id,
     message: result.details,
