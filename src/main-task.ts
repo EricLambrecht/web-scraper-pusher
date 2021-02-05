@@ -7,11 +7,13 @@ import ChangeScraper, {
 import ImmoweltScraper from './scrapers/ImmoweltScraper.js'
 import ImmonetScraper from './scrapers/ImmonetScraper.js'
 import { DB_TABLE_CHANGE_SCRAPERS } from './config/db.js'
+import IVD24Scraper from './scrapers/IVD24Scraper.js'
 
 const SCRAPER_LIST: typeof ChangeScraper[] = [
   // ImmoScout24Scraper, // has bot protection!
-  ImmoweltScraper,
-  ImmonetScraper,
+  // ImmoweltScraper,
+  // ImmonetScraper,
+  IVD24Scraper,
 ]
 
 const run = async (): Promise<void> => {
@@ -74,7 +76,7 @@ const runChangeDetection = async (
 ): Promise<void> => {
   const browser = await Puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    headless: true, // TODO: make configurable via flag
+    headless: false, // TODO: make configurable via flag
   })
 
   const page = await browser.newPage()
