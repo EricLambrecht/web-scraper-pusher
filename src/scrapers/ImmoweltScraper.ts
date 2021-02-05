@@ -7,9 +7,7 @@ export default class ImmoweltScraper extends ListChangeScraper {
     'https://www.immowelt.de/liste/suchauftragsergebnisse/ca7cf7c23fa64ea686897bd03b26b169'
 
   async scrapeForListElement() {
-    // await this.handleCookieBanner()
-    const resultList = await this.page.$('.immoliste')
-    return resultList
+    return this.page.$('.immoliste')
   }
 
   async getListElements(list: ElementHandle) {
@@ -28,20 +26,5 @@ export default class ImmoweltScraper extends ListChangeScraper {
     const exposeLink = await listItem.$('* > a')
     const relativeLinkPath = await this.getElementAttribute(exposeLink, 'href')
     return 'https://www.immowelt.de' + relativeLinkPath
-  }
-
-  async handleCookieBanner() {
-    try {
-      const cookieBanner = await this.page.waitForSelector(
-        '[data-testid=uc-tcf-first-layer]',
-        { timeout: 5000 }
-      )
-      if (cookieBanner) {
-        const acceptButton = await cookieBanner.$('footer button:last-child')
-        await acceptButton.click()
-      }
-    } catch (e) {
-      console.log(e)
-    }
   }
 }
