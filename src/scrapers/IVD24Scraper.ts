@@ -13,7 +13,7 @@ export default class IVD24Scraper extends ListChangeScraper {
     return resultList
   }
 
-  async getListElements(list: ElementHandle) {
+  async getListItemElements(list: ElementHandle) {
     return list.$$('.rr-list-results')
   }
 

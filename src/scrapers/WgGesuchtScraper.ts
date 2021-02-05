@@ -10,7 +10,7 @@ export default class WgGesuchtScraper extends ListChangeScraper {
     return this.page.$('#main_column')
   }
 
-  async getListElements(list: ElementHandle) {
+  async getListItemElementsents(list: ElementHandle) {
     return list.$$('.wgg_card.offer_list_item ')
   }
 

@@ -19,7 +19,7 @@ export default class ListChangeScraper extends ChangeScraper {
   }
 
   async onScrapingFinished(scrapedList: ElementHandle) {
-    this.listElements = await this.getListElements(scrapedList)
+    this.listElements = await this.getListItemElements(scrapedList)
     const comparisonValueArray = await Promise.all(
       this.listElements.map((el) =>
         this.retrieveComparisonValueFromListItem(el)
@@ -37,10 +37,10 @@ export default class ListChangeScraper extends ChangeScraper {
     return Object.keys(this.comparisonValueToListItemMap).join(',')
   }
 
-  async getListElements(list: ElementHandle): Promise<ElementHandle[]> {
+  async getListItemElements(list: ElementHandle): Promise<ElementHandle[]> {
     throw new Error(
       this.name +
-        ': ListChange scrapers must implement the getListElements function.'
+        ': ListChange scrapers must implement the getListItemElements function.'
     )
   }
 

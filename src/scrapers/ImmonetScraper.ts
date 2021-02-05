@@ -10,7 +10,7 @@ export default class ImmonetScraper extends ListChangeScraper {
     return this.page.$('#idResultList')
   }
 
-  async getListElements(list: ElementHandle) {
+  async getListItemElements(list: ElementHandle) {
     return list.$$('div.item')
   }
 

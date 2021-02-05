@@ -12,7 +12,7 @@ export default class ImmoScout24Scraper extends ListChangeScraper {
     return this.page.waitForSelector('ul#resultListItems')
   }
 
-  async getListElements(list: ElementHandle) {
+  async getListItemElements(list: ElementHandle) {
     return list.$$('li')
   }
 
