@@ -29,6 +29,11 @@ export default class ChangeScraper {
 
     await this.page.goto(this.startUrl)
     const scrapedElement = await this.scrapeForElement()
+    if (!scrapedElement) {
+      throw new Error(
+        `${this.name}: No element was scraped. This usually means that scrapeForElement() returned null or undefined`
+      )
+    }
     await this.onScrapingFinished(scrapedElement)
 
     const previousValue = await this.getPreviousValue()
