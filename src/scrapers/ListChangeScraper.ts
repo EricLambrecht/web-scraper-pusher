@@ -2,6 +2,11 @@ import { ElementHandle } from 'puppeteer'
 import ChangeScraper, { ChangeDetectionValue } from './ChangeScraper.js'
 
 export default class ListChangeScraper extends ChangeScraper {
+  listElements: ElementHandle[]
+  comparisonValueToListItemMap: {
+    [key: string]: ElementHandle
+  } = {}
+
   async scrapeForElement() {
     return this.scrapeForListElement()
   }
@@ -13,19 +18,29 @@ export default class ListChangeScraper extends ChangeScraper {
     )
   }
 
-  async retrieveComparisonValueFromScrapedElement(list: ElementHandle) {
-    const items = await this.getListItems(list)
-    if (items.length === 0) {
-      return ''
-    }
-    const firstItem = items[0]
-    return this.retrieveComparisonValueFromListItem(firstItem)
+  async onScrapingFinished(scrapedList: ElementHandle) {
+    this.listElements = await this.getListElements(scrapedList)
+    const comparisonValueArray = await Promise.all(
+      this.listElements.map((el) =>
+        this.retrieveComparisonValueFromListItem(el)
+      )
+    )
+    comparisonValueArray.forEach((value, index) => {
+      this.comparisonValueToListItemMap[value] = this.listElements[index]
+    })
   }
 
-  async getListItems(list: ElementHandle): Promise<ElementHandle[]> {
+  async retrieveComparisonValueFromScrapedElement(list: ElementHandle) {
+    if (this.listElements.length === 0) {
+      return ''
+    }
+    return Object.keys(this.comparisonValueToListItemMap).join(',')
+  }
+
+  async getListElements(list: ElementHandle): Promise<ElementHandle[]> {
     throw new Error(
       this.name +
-        ': ListChange scrapers must implement the getListItems function.'
+        ': ListChange scrapers must implement the getListElements function.'
     )
   }
 
@@ -53,16 +68,19 @@ export default class ListChangeScraper extends ChangeScraper {
   }
 
   async getDelta(
-    scrapedList: ElementHandle,
-    lastValue: ChangeDetectionValue
+    newValue: ChangeDetectionValue,
+    lastValue: ChangeDetectionValue,
+    scrapedList: ElementHandle
   ): Promise<ElementHandle[]> {
-    const listElements = await this.getListItems(scrapedList)
-    const listElementsMappedToValue = await Promise.all(
-      listElements.map((el) => this.retrieveComparisonValueFromListItem(el))
+    if (newValue === lastValue) {
+      return []
+    }
+    const newValueArray = newValue.split(',')
+    const lastValueArray = lastValue.split(',')
+
+    const deltaValues = newValueArray.filter(
+      (value) => !lastValueArray.includes(value)
     )
-    const indexOfLastValue = listElementsMappedToValue.findIndex(
-      (val) => val === lastValue
-    )
-    return listElements.slice(0, indexOfLastValue)
+    return deltaValues.map((value) => this.comparisonValueToListItemMap[value])
   }
 }

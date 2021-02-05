@@ -29,14 +29,15 @@ export default class ChangeScraper {
 
     await this.page.goto(this.startUrl)
     const scrapedElement = await this.scrapeForElement()
+    await this.onScrapingFinished(scrapedElement)
+
     const previousValue = await this.getPreviousValue()
-
-    const delta = await this.getDelta(scrapedElement, previousValue)
-    const details = await this.inferDetailsFromDelta(delta)
-
     const newValue = await this.retrieveComparisonValueFromScrapedElement(
       scrapedElement
     )
+    const delta = await this.getDelta(newValue, previousValue, scrapedElement)
+    const details = await this.inferDetailsFromDelta(delta)
+
     await this.persistValue(newValue)
 
     return {
@@ -51,6 +52,14 @@ export default class ChangeScraper {
    */
   async scrapeForElement(): Promise<ElementHandle> {
     throw new Error(`${this.name} is missing the scrapeForValue() function!`)
+  }
+
+  /**
+   * Event handler that executes when scraping has finished
+   * @param scrapedElement The previously scraped element
+   */
+  async onScrapingFinished(scrapedElement): Promise<void> {
+    return
   }
 
   /**
@@ -95,12 +104,14 @@ export default class ChangeScraper {
   /**
    * Returns a list of changes compared to the previous scraping session. An empty array means nothing has changed.
    * The list can contain one or more items depending on what has changed and what is supposed to be done with the delta.
+   * @param newValue The value that will be stored in the database
+   * @param lastValue The value that is currently stored in the database
    * @param scrapedElement The currently scraped element
-   * @param lastValue
    */
   async getDelta(
-    scrapedElement: ElementHandle,
-    lastValue: ChangeDetectionValue
+    newValue: ChangeDetectionValue,
+    lastValue: ChangeDetectionValue,
+    scrapedElement: ElementHandle
   ): Promise<ElementHandle[]> {
     return []
   }

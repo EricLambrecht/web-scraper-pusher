@@ -12,7 +12,7 @@ export default class ImmoweltScraper extends ListChangeScraper {
     return resultList
   }
 
-  async getListItems(list: ElementHandle) {
+  async getListElements(list: ElementHandle) {
     return list.$$('.listitem')
   }
 

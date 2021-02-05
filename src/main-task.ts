@@ -11,8 +11,8 @@ import IVD24Scraper from './scrapers/IVD24Scraper.js'
 
 const SCRAPER_LIST: typeof ChangeScraper[] = [
   // ImmoScout24Scraper, // has bot protection!
-  // ImmoweltScraper,
-  // ImmonetScraper,
+  ImmoweltScraper,
+  ImmonetScraper,
   IVD24Scraper,
 ]
 
@@ -61,10 +61,14 @@ const initDatabase = async (): Promise<Client> => {
   await client.connect()
   await client.query(`CREATE TABLE IF NOT EXISTS ${DB_TABLE_CHANGE_SCRAPERS} (
     name varchar(45) NOT NULL,
-    last_value varchar(450) NOT NULL,
+    last_value varchar(8192) NOT NULL,
     enabled boolean NOT NULL DEFAULT 'true',
     PRIMARY KEY (name)
   );`)
+  // TODO: This is only temporary
+  await client.query(
+    `ALTER TABLE ${DB_TABLE_CHANGE_SCRAPERS} ALTER COLUMN last_value TYPE varchar(8192);`
+  )
   return client
 }
 
@@ -76,7 +80,7 @@ const runChangeDetection = async (
 ): Promise<void> => {
   const browser = await Puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    headless: false, // TODO: make configurable via flag
+    headless: true, // TODO: make configurable via flag
   })
 
   const page = await browser.newPage()
