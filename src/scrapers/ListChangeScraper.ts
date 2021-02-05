@@ -39,10 +39,12 @@ export default class ListChangeScraper extends ChangeScraper {
   }
 
   async inferDetailsFromDelta(delta: ElementHandle[]) {
-    const detailMap = await Promise.all(
+    const deltaToDetailMap = await Promise.all(
       delta.map((el) => this.inferDetailsFromListItem(el))
     )
-    return `${detailMap.length} neue(s) Ergebnis(se): ${detailMap.join(', ')}`
+    return `${
+      deltaToDetailMap.length
+    } neue(s) Ergebnis(se): ${deltaToDetailMap.join(', ')}`
   }
 
   async inferDetailsFromListItem(listItem: ElementHandle) {

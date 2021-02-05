@@ -12,7 +12,6 @@ export default class ImmonetScraper extends ListChangeScraper {
   }
 
   async getListItems(list: ElementHandle) {
-    console.log((await list.$$('div.item')).length)
     return list.$$('div.item')
   }
 

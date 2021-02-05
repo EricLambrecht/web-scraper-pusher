@@ -1,6 +1,9 @@
 import Puppeteer from 'puppeteer'
+import Pusher from 'pusher'
 import { Client } from 'pg'
-import ChangeScraper from './scrapers/ChangeScraper.js'
+import ChangeScraper, {
+  ChangeDetectionResult,
+} from './scrapers/ChangeScraper.js'
 import ImmoweltScraper from './scrapers/ImmoweltScraper.js'
 import ImmonetScraper from './scrapers/ImmonetScraper.js'
 import { DB_TABLE_CHANGE_SCRAPERS } from './config/db.js'
@@ -15,7 +18,8 @@ const run = async (): Promise<void> => {
   sayHello()
   try {
     const dbClient = await initDatabase()
-    await runChangeDetection(dbClient)
+    const pusher = initPusher()
+    await runChangeDetection(dbClient, pusher)
     closeDatabase(dbClient)
   } catch (e) {
     console.log(e)
@@ -30,6 +34,18 @@ const sayHello = (): void => {
 const sayGoodbye = (): void => {
   console.log('>>> Scraping finished! <<<')
   process.exit()
+}
+
+const initPusher = (): Pusher => {
+  const pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID,
+    key: process.env.PUSHER_KEY,
+    secret: process.env.PUSHER_SECRET,
+    cluster: process.env.PUSHER_CLUSTER,
+    useTLS: true,
+  })
+
+  return pusher
 }
 
 const initDatabase = async (): Promise<Client> => {
@@ -52,7 +68,10 @@ const initDatabase = async (): Promise<Client> => {
 
 const closeDatabase = async (client: Client): Promise<void> => client.end()
 
-const runChangeDetection = async (client: Client): Promise<void> => {
+const runChangeDetection = async (
+  client: Client,
+  pusher: Pusher
+): Promise<void> => {
   const browser = await Puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     headless: true, // TODO: make configurable via flag
@@ -65,15 +84,19 @@ const runChangeDetection = async (client: Client): Promise<void> => {
     console.log(`Running ${scraper.name}...`)
     const result = await scraper.detectChange()
     if (result.hasChanged) {
-      publishNotification(result.details)
+      publishNotification(pusher, result)
     }
   }
 
   await browser.close()
 }
 
-const publishNotification = (notification: string) => {
-  console.log('Notification: ' + notification)
+const publishNotification = (pusher: Pusher, result: ChangeDetectionResult) => {
+  console.log('Notification: ' + result.details)
+  pusher.trigger('scraper_updates', 'change_detected', {
+    id: result.id,
+    message: result.details,
+  })
 }
 
 //

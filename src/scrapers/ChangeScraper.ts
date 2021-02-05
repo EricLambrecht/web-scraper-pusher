@@ -3,6 +3,7 @@ import { ElementHandle, Page } from 'puppeteer'
 import { DB_TABLE_CHANGE_SCRAPERS } from '../config/db'
 
 export type ChangeDetectionResult = {
+  id: string
   hasChanged: boolean
   details?: string
 }
@@ -39,6 +40,7 @@ export default class ChangeScraper {
     await this.persistValue(newValue)
 
     return {
+      id: this.name,
       hasChanged: delta.length !== 0,
       details,
     }

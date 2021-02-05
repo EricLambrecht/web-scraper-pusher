@@ -52,6 +52,18 @@ heroku addons:create heroku-postgresql:hobby-dev
 
 **Note**: You will have to [install Postgress locally](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup), too! — well... — only if you want to run the code locally of course.
 
+### Environment Variables
+
+The script needs some environment variables that have to be set locally (and on Heroku etc.).
+
+| Name             | Description                                                                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `DATABASE_URL`   | A PostgreSQL connection string (shoulb be automatically set on Heroku), locally something like `postgres://user:pw@localhost/db....` |
+| `PUSHER_APP_ID`  | App ID of your pusher app                                                                                                            |
+| `PUSHER_CLUSTER` | Cluster of your pusher app                                                                                                           |
+| `PUSHER_KEY`     | Key of you pusher app                                                                                                                |
+| `PUSHER_SECRET`  | Secret of your pusher app                                                                                                            |
+
 #### Deployments
 
 ```bash

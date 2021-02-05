@@ -13,7 +13,6 @@ export default class ImmoweltScraper extends ListChangeScraper {
   }
 
   async getListItems(list: ElementHandle) {
-    console.log((await list.$$('.listitem')).length)
     return list.$$('.listitem')
   }
 
