@@ -118,7 +118,10 @@ export default class ChangeScraper {
     lastValue: ChangeDetectionValue,
     scrapedElement: ElementHandle
   ): Promise<ElementHandle[]> {
-    return []
+    if (newValue !== lastValue) {
+      return []
+    }
+    return [scrapedElement]
   }
 
   async getElementTextContent(element: ElementHandle): Promise<string | null> {
