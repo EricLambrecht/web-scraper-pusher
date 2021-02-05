@@ -8,7 +8,7 @@ import { DB_TABLE_CHANGE_SCRAPERS } from './config/db.js'
 import ImmoweltScraper from './scrapers/ImmoweltScraper.js'
 import ImmonetScraper from './scrapers/ImmonetScraper.js'
 import IVD24Scraper from './scrapers/IVD24Scraper.js'
-import WgGesuchtScraper from './scrapers/WGGesuchtScraper.js'
+import WgGesuchtScraper from './scrapers/WgGesuchtScraper.js'
 
 const SCRAPER_LIST: typeof ChangeScraper[] = [
   // ImmoScout24Scraper, // has bot protection!
