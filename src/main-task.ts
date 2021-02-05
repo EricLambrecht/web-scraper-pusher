@@ -6,9 +6,9 @@ import ImmonetScraper from './scrapers/ImmonetScraper.js'
 import { DB_TABLE_CHANGE_SCRAPERS } from './config/db.js'
 
 const SCRAPER_LIST: typeof ChangeScraper[] = [
-    // ImmoScout24Scraper, // has bot protection!
-    ImmoweltScraper,
-    ImmonetScraper,
+  // ImmoScout24Scraper, // has bot protection!
+  ImmoweltScraper,
+  ImmonetScraper,
 ]
 
 const run = async (): Promise<void> => {
@@ -17,8 +17,7 @@ const run = async (): Promise<void> => {
     const dbClient = await initDatabase()
     await runChangeDetection(dbClient)
     closeDatabase(dbClient)
-  }
-  catch (e) {
+  } catch (e) {
     console.log(e)
   }
   sayGoodbye()
@@ -38,9 +37,9 @@ const initDatabase = async (): Promise<Client> => {
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {
-      rejectUnauthorized: false
-    }
-  });
+      rejectUnauthorized: false,
+    },
+  })
   await client.connect()
   await client.query(`CREATE TABLE IF NOT EXISTS ${DB_TABLE_CHANGE_SCRAPERS} (
     name varchar(45) NOT NULL,
@@ -55,14 +54,11 @@ const closeDatabase = async (client: Client): Promise<void> => client.end()
 
 const runChangeDetection = async (client: Client): Promise<void> => {
   const browser = await Puppeteer.launch({
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-    ],
-    headless: true // TODO: make configurable via flag
-  });
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: true, // TODO: make configurable via flag
+  })
 
-  const page = await browser.newPage();
+  const page = await browser.newPage()
 
   for (const Scraper of SCRAPER_LIST) {
     const scraper = new Scraper(page, client)
@@ -73,7 +69,7 @@ const runChangeDetection = async (client: Client): Promise<void> => {
     }
   }
 
-  await browser.close();
+  await browser.close()
 }
 
 const publishNotification = (notification: string) => {
