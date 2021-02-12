@@ -1,5 +1,6 @@
 import Puppeteer from 'puppeteer'
 import Pusher from 'pusher'
+import PushNotifications, { ApnsPayload } from '@pusher/push-notifications-server'
 import { Client } from 'pg'
 import ChangeScraper, {
   ChangeDetectionResult,
@@ -18,12 +19,24 @@ const SCRAPER_LIST: typeof ChangeScraper[] = [
   WgGesuchtScraper,
 ]
 
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: process.env.PUSHER_CLUSTER,
+  useTLS: true,
+})
+
+let beamsClient = new PushNotifications({
+  instanceId: process.env.PUSHER_BEAM_INSTANCE_ID,
+  secretKey: process.env.PUSHER_BEAM_SECRET_KEY
+});
+
 const run = async (): Promise<void> => {
   sayHello()
   try {
     const dbClient = await initDatabase()
-    const pusher = initPusher()
-    await runChangeDetection(dbClient, pusher)
+    await runChangeDetection(dbClient)
     closeDatabase(dbClient)
   } catch (e) {
     console.log(e)
@@ -49,6 +62,11 @@ const initPusher = (): Pusher => {
     useTLS: true,
   })
 
+  let beamsClient = new PushNotifications({
+    instanceId: 'YOUR_INSTANCE_ID_HERE',
+    secretKey: 'YOUR_SECRET_KEY_HERE'
+  });
+
   return pusher
 }
 
@@ -73,8 +91,7 @@ const initDatabase = async (): Promise<Client> => {
 const closeDatabase = async (client: Client): Promise<void> => client.end()
 
 const runChangeDetection = async (
-  client: Client,
-  pusher: Pusher
+  client: Client
 ): Promise<void> => {
   const browser = await Puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -88,19 +105,58 @@ const runChangeDetection = async (
     console.log(`Running ${scraper.name}...`)
     const result = await scraper.detectChange()
     if (result.hasChanged) {
-      publishNotification(pusher, result)
+      publishNotification(result)
     }
   }
 
   await browser.close()
 }
 
-const publishNotification = (pusher: Pusher, result: ChangeDetectionResult) => {
+const publishNotification = async (result: ChangeDetectionResult) => {
   console.log('Sending new notification: ' + result.details)
+  const title = result.scraper.name
+  const body = result.details || "no message"
+  const url = result.url
   pusher.trigger('scraper_updates', 'change_detected', {
-    id: result.id,
-    message: result.details,
+    headline: title,
+    message: body,
   })
+  try {
+    await beamsClient.publishToInterests(['private'], {
+      apns: {
+        aps: {
+          alert: {
+            title,
+            body,
+          },
+          sound : "chime.aiff",
+          "content-available": "1"
+        },
+        url
+      } as ApnsPayload,
+      fcm: {
+        notification: {
+          title,
+          body
+        },
+        data: {
+          url
+        }
+      },
+      web: {
+        notification: {
+          title,
+          body
+        },
+        data: {
+          url
+        }
+      }
+    })
+    console.log("Pusher Beam has been sent")
+  } catch(e) {
+    console.log("Error publishing to interests (Pusher Beam)")
+  }
 }
 
 //

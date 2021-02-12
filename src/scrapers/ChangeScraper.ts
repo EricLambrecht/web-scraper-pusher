@@ -3,9 +3,12 @@ import { ElementHandle, Page } from 'puppeteer'
 import { DB_TABLE_CHANGE_SCRAPERS } from '../config/db'
 
 export type ChangeDetectionResult = {
-  id: string
+  scraper: {
+    name: string
+  }
   hasChanged: boolean
   details?: string
+  url?: string
 }
 
 export type ChangeDetectionValue = string
@@ -42,13 +45,17 @@ export default class ChangeScraper {
     )
     const delta = await this.getDelta(newValue, previousValue, scrapedElement)
     const details = await this.inferDetailsFromDelta(delta)
+    const url = await this.inferUrlFromDelta(delta)
 
     await this.persistValue(newValue)
 
     return {
-      id: this.name,
+      scraper: {
+        name: this.name
+      },
       hasChanged: delta.length !== 0,
       details,
+      url
     }
   }
 
@@ -150,5 +157,9 @@ export default class ChangeScraper {
 
   async inferDetailsFromDelta(delta: ElementHandle[]): Promise<string> {
     return ''
+  }
+
+  async inferUrlFromDelta(delta: ElementHandle[]): Promise<string | null> {
+    return this.startUrl
   }
 }
