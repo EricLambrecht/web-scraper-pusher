@@ -7,7 +7,7 @@ export default class ImmonetScraper extends ListChangeScraper {
     'https://www.immonet.de/immobiliensuche/sel.do?&marketingtype=2&fromarea=55.0&toprice=1300.0&city=109447&objectrights=1&fromrooms=2.5&district=9542&district=9564&district=9543&district=9565&district=9563&district=9524&district=9601&district=9623&district=9525&district=72732&district=9566&district=9588&district=9545&district=9560&district=9539&district=9615&district=9619&district=9554&district=9573&district=9595&district=7254&district=9535&district=9558&district=9555&district=9528&district=9527&district=9607&district=9608&parentcat=1&sortby=19&suchart=1&objecttype=1&outputtype=ajax&searchall=26l16i5296665504'
 
   async scrapeForListElement() {
-    return this.page.$('#idResultList')
+    return this.page.$('#result-list-stage')
   }
 
   async getListItemElements(list: ElementHandle) {
@@ -25,12 +25,12 @@ export default class ImmonetScraper extends ListChangeScraper {
   async inferUrlFromDelta(items: ElementHandle[]) {
     if (items.length < 1) {
       return null
-    } 
+    }
     return this.getExposeUrlFromListItem(items[0])
   }
 
   async getExposeUrlFromListItem(listItem: ElementHandle): Promise<string> {
-    const exposeLink = await listItem.$('a[id^=lnkImgToDetails]')
+    const exposeLink = await listItem.$('a[id^=lnkToDetails]')
     const relativeLinkPath = await this.getElementAttribute(exposeLink, 'href')
     return 'https://www.immonet.de' + relativeLinkPath
   }
