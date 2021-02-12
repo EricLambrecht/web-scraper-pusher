@@ -22,6 +22,13 @@ export default class ImmoweltScraper extends ListChangeScraper {
     return this.getExposeUrlFromListItem(listItem)
   }
 
+  async inferUrlFromDelta(items: ElementHandle[]) {
+    if (items.length < 1) {
+      return null
+    } 
+    return this.getExposeUrlFromListItem(items[0])
+  }
+
   async getExposeUrlFromListItem(listItem: ElementHandle): Promise<string> {
     const exposeLink = await listItem.$('* > a')
     const relativeLinkPath = await this.getElementAttribute(exposeLink, 'href')
