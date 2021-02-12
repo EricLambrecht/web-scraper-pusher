@@ -6,6 +6,7 @@ export type ChangeDetectionResult = {
   scraper: {
     name: string
   }
+  scrapeDate: Date
   hasChanged: boolean
   details?: string
   url?: string
@@ -51,11 +52,12 @@ export default class ChangeScraper {
 
     return {
       scraper: {
-        name: this.name
+        name: this.name,
       },
+      scrapeDate: new Date(),
       hasChanged: delta.length !== 0,
       details,
-      url
+      url,
     }
   }
 

@@ -117,9 +117,15 @@ const publishNotification = async (result: ChangeDetectionResult) => {
   const title = result.scraper.name
   const body = result.details || 'no message'
   const url = result.url
+  const customData = {
+    url,
+    date: result.scrapeDate,
+  }
   pusher.trigger('scraper_updates', 'change_detected', {
     headline: title,
     message: body,
+    url: url,
+    date: result.scrapeDate,
   })
   console.log('url' + url)
   try {
@@ -132,27 +138,21 @@ const publishNotification = async (result: ChangeDetectionResult) => {
           },
           sound: 'chime.aiff',
         },
-        data: {
-          url,
-        },
+        data: customData,
       } as ApnsPayload,
       fcm: {
         notification: {
           title,
           body,
         },
-        data: {
-          url,
-        },
+        data: customData,
       },
       web: {
         notification: {
           title,
           body,
         },
-        data: {
-          url,
-        },
+        data: customData,
       },
     })
     console.log('Pusher Beam has been sent')
