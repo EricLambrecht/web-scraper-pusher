@@ -12,6 +12,7 @@ import ImmoweltScraper from './scrapers/ImmoweltScraper.js'
 import ImmonetScraper from './scrapers/ImmonetScraper.js'
 import IVD24Scraper from './scrapers/IVD24Scraper.js'
 import WgGesuchtScraper from './scrapers/WgGesuchtScraper.js'
+import EbayKleinanzeigenScraper from './scrapers/EbayKleinanzeigenScraper.js'
 
 const SCRAPER_LIST: typeof ChangeScraper[] = [
   // ImmoScout24Scraper, // has bot protection!
@@ -19,6 +20,7 @@ const SCRAPER_LIST: typeof ChangeScraper[] = [
   ImmonetScraper,
   IVD24Scraper,
   WgGesuchtScraper,
+  EbayKleinanzeigenScraper,
 ]
 
 const pusher = new Pusher({
