@@ -121,6 +121,7 @@ const publishNotification = async (result: ChangeDetectionResult) => {
     headline: title,
     message: body,
   })
+  console.log("url" + url)
   try {
     await beamsClient.publishToInterests(['private'], {
       apns: {
@@ -132,7 +133,9 @@ const publishNotification = async (result: ChangeDetectionResult) => {
           sound : "chime.aiff",
           "content-available": "1"
         },
-        url
+        data: {
+          url
+        }
       } as ApnsPayload,
       fcm: {
         notification: {
