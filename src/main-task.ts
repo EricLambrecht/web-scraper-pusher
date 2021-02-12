@@ -1,6 +1,8 @@
 import Puppeteer from 'puppeteer'
 import Pusher from 'pusher'
-import PushNotifications, { ApnsPayload } from '@pusher/push-notifications-server'
+import PushNotifications, {
+  ApnsPayload,
+} from '@pusher/push-notifications-server'
 import { Client } from 'pg'
 import ChangeScraper, {
   ChangeDetectionResult,
@@ -29,8 +31,8 @@ const pusher = new Pusher({
 
 let beamsClient = new PushNotifications({
   instanceId: process.env.PUSHER_BEAM_INSTANCE_ID,
-  secretKey: process.env.PUSHER_BEAM_SECRET_KEY
-});
+  secretKey: process.env.PUSHER_BEAM_SECRET_KEY,
+})
 
 const run = async (): Promise<void> => {
   sayHello()
@@ -64,8 +66,8 @@ const initPusher = (): Pusher => {
 
   let beamsClient = new PushNotifications({
     instanceId: 'YOUR_INSTANCE_ID_HERE',
-    secretKey: 'YOUR_SECRET_KEY_HERE'
-  });
+    secretKey: 'YOUR_SECRET_KEY_HERE',
+  })
 
   return pusher
 }
@@ -90,9 +92,7 @@ const initDatabase = async (): Promise<Client> => {
 
 const closeDatabase = async (client: Client): Promise<void> => client.end()
 
-const runChangeDetection = async (
-  client: Client
-): Promise<void> => {
+const runChangeDetection = async (client: Client): Promise<void> => {
   const browser = await Puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     headless: true, // TODO: make configurable via flag
@@ -115,13 +115,13 @@ const runChangeDetection = async (
 const publishNotification = async (result: ChangeDetectionResult) => {
   console.log('Sending new notification: ' + result.details)
   const title = result.scraper.name
-  const body = result.details || "no message"
+  const body = result.details || 'no message'
   const url = result.url
   pusher.trigger('scraper_updates', 'change_detected', {
     headline: title,
     message: body,
   })
-  console.log("url" + url)
+  console.log('url' + url)
   try {
     await beamsClient.publishToInterests(['private'], {
       apns: {
@@ -130,35 +130,35 @@ const publishNotification = async (result: ChangeDetectionResult) => {
             title,
             body,
           },
-          sound : "chime.aiff",
-          "content-available": "1"
+          sound: 'chime.aiff',
         },
         data: {
-          url
-        }
+          url,
+        },
       } as ApnsPayload,
       fcm: {
         notification: {
           title,
-          body
+          body,
         },
         data: {
-          url
-        }
+          url,
+        },
       },
       web: {
         notification: {
           title,
-          body
+          body,
         },
         data: {
-          url
-        }
-      }
+          url,
+        },
+      },
     })
-    console.log("Pusher Beam has been sent")
-  } catch(e) {
-    console.log("Error publishing to interests (Pusher Beam)")
+    console.log('Pusher Beam has been sent')
+  } catch (e) {
+    console.log('Error publishing to interests (Pusher Beam)')
+    console.log(e)
   }
 }
 
