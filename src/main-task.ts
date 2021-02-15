@@ -120,16 +120,20 @@ const publishNotification = async (result: ChangeDetectionResult) => {
   const body = result.details || 'no message'
   const url = result.url
   const customData = {
+    title,
+    body,
     url,
-    date: result.scrapeDate,
+    date: result.scrapeDate.toISOString(),
+    type: 'standard',
   }
+
   pusher.trigger('scraper_updates', 'change_detected', {
     headline: title,
     message: body,
     url: url,
-    date: result.scrapeDate,
+    date: result.scrapeDate.toISOString(),
   })
-  console.log('url' + url)
+
   try {
     await beamsClient.publishToInterests(['private'], {
       apns: {
